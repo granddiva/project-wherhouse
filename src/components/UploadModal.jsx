@@ -110,20 +110,43 @@ export default function UploadModal({ isOpen, onClose, onSave, editingDoc, curre
   };
 
   return (
-    <div className="modal-backdrop-blur">
-      <div className="modal-container modal-wide">
+    <div className="modal-backdrop-blur" onClick={onClose}>
+      <form
+        className="modal-container modal-wide"
+        onSubmit={handleSubmit}
+        onClick={(e) => e.stopPropagation()}
+        style={{ overflow: 'hidden' }}
+      >
         <div className="modal-header-bar">
           <div className="modal-header-title">
             <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--bms-blue-600)' }}>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
             <h3>{editingDoc ? `Edit Data PB (${editingDoc.nomorPb})` : 'Upload & Arsipkan Dokumen PB Baru'}</h3>
           </div>
-          <button type="button" className="btn-modal-close" onClick={onClose}>&times;</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button
+              type="submit"
+              className="btn-primary"
+              style={{
+                fontSize: '0.82rem',
+                padding: '7px 14px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+              title="Simpan Dokumen PB"
+            >
+              <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Simpan</span>
+            </button>
+            <button type="button" className="btn-modal-close" onClick={onClose} title="Tutup">&times;</button>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="modal-body-scroll">
+        <div className="modal-body-scroll">
             
             {/* Row 1: Nomor PB & Tanggal */}
             <div className="form-2col">
@@ -374,16 +397,33 @@ export default function UploadModal({ isOpen, onClose, onSave, editingDoc, curre
 
           </div>
 
-          <div className="modal-footer-bar">
-            <button type="button" className="btn-secondary" onClick={onClose}>
-              Batal
-            </button>
-            <button type="submit" className="btn-primary">
-              {editingDoc ? 'Simpan Perubahan' : 'Simpan & Arsipkan Dokumen'}
-            </button>
+          <div className="modal-footer-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              <span className="required-star">*</span> Kolom bertanda bintang wajib diisi
+            </span>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button type="button" className="btn-secondary" onClick={onClose} style={{ minWidth: '90px' }}>
+                Batal
+              </button>
+              <button
+                type="submit"
+                className="btn-primary"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '9px 20px',
+                  fontWeight: 700
+                }}
+              >
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>{editingDoc ? 'Simpan Perubahan' : 'Simpan & Arsipkan Dokumen'}</span>
+              </button>
+            </div>
           </div>
         </form>
       </div>
-    </div>
   );
 }

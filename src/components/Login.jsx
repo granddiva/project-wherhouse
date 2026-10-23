@@ -9,16 +9,48 @@ export default function Login({ onLogin, showToast }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const cleanUsername = username.trim();
+    if (!cleanUsername) {
+      showToast('Harap masukkan nama atau username Anda', 'warning');
+      return;
+    }
+
+    // 1. Cek apakah cocok dengan akun default (admin / dayat / petugas)
     const foundUser = DEFAULT_USERS.find(
-      (u) => u.username.toLowerCase() === username.trim().toLowerCase() && u.password === password
+      (u) => u.username.toLowerCase() === cleanUsername.toLowerCase() && u.password === password
     );
 
     if (foundUser) {
       onLogin(foundUser);
       showToast(`Selamat datang, ${foundUser.name} (${foundUser.role})`, 'success');
-    } else {
-      showToast('Username atau password salah! Silakan coba lagi.', 'danger');
+      return;
     }
+
+    // 2. Jika memasukkan nama sendiri / orang lain (misal: "Dayat", atau nama siapapun)
+    const formattedName = cleanUsername
+      .split(' ')
+      .filter(Boolean)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join(' ');
+
+    const initials = formattedName
+      .split(' ')
+      .filter(Boolean)
+      .map((w) => w.charAt(0).toUpperCase())
+      .join('')
+      .slice(0, 2) || 'US';
+
+    const customUser = {
+      id: `usr-${Date.now()}`,
+      username: cleanUsername.toLowerCase(),
+      name: formattedName,
+      role: cleanUsername.toLowerCase().includes('admin') ? 'Admin Warehouse' : 'Petugas Warehouse',
+      nip: `BMS-WH-${Math.floor(1000 + Math.random() * 9000)}`,
+      avatar: initials
+    };
+
+    onLogin(customUser);
+    showToast(`Selamat datang, ${customUser.name} (${customUser.role})`, 'success');
   };
 
   const handleQuickFill = (roleType) => {
@@ -50,12 +82,12 @@ export default function Login({ onLogin, showToast }) {
           </div>
           <h1 className="login-title">Sistem Pengarsipan &amp; Pencarian PB</h1>
           <p className="login-company">PT BESMINDO MATERI SEWATAMA</p>
-          <p className="login-subtitle">Silakan masuk menggunakan akun Petugas atau Admin Warehouse</p>
+          <p className="login-subtitle">Silakan pilih hak akses atau masukkan nama Anda untuk mulai bekerja</p>
         </div>
 
         {/* Quick Fill Preset Buttons */}
         <div className="quick-fill-box">
-          <span className="quick-fill-label">Pilih Akun Demo Cepat:</span>
+          <span className="quick-fill-label">Pilihan Akses Cepat:</span>
           <div className="quick-fill-grid">
             <button
               type="button"
@@ -63,22 +95,22 @@ export default function Login({ onLogin, showToast }) {
               onClick={() => handleQuickFill('admin')}
             >
               <strong>Admin Warehouse</strong>
-              <span>User: admin / admin123</span>
+              <span>Akses Penuh / Supervisor</span>
             </button>
             <button
               type="button"
               className="btn-quick-fill"
               onClick={() => handleQuickFill('petugas')}
             >
-              <strong>Petugas Arsip</strong>
-              <span>User: petugas / petugas123</span>
+              <strong>Staff / Pengguna Umum</strong>
+              <span>Akses Semua Karyawan</span>
             </button>
           </div>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label" htmlFor="username">Username / ID Pegawai</label>
+            <label className="form-label" htmlFor="username">Username / ID Pegawai / Nama Anda</label>
             <div className="form-input-icon-wrap">
               <svg className="form-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -89,7 +121,7 @@ export default function Login({ onLogin, showToast }) {
                 className="form-input"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Masukkan username..."
+                placeholder="Masukkan username atau nama Anda..."
                 required
               />
             </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 
-export default function Navbar({ currentView, onOpenUpload, onToggleMobileSidebar, currentUser, onPromptLogout }) {
+export default function Navbar({ currentView, onOpenUpload, onToggleMobileSidebar, currentUser, onPromptLogout, onLogout }) {
+  const handleLogoutClick = onPromptLogout || onLogout;
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const todayStr = new Date().toLocaleDateString('id-ID', options);
 
@@ -56,23 +57,11 @@ export default function Navbar({ currentView, onOpenUpload, onToggleMobileSideba
           <span>{todayStr}</span>
         </div>
 
-        {/* Upload Action Button */}
-        <button
-          type="button"
-          className="btn-topbar-upload"
-          onClick={onOpenUpload}
-        >
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"/>
-          </svg>
-          <span>Upload PB</span>
-        </button>
-
         {/* Dedicated Navbar Logout Button */}
         <button
           type="button"
           className="btn-secondary"
-          onClick={onPromptLogout}
+          onClick={handleLogoutClick}
           title="Keluar dari Akun"
           style={{
             borderColor: '#fca5a5',

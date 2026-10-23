@@ -99,10 +99,9 @@ export default function DocumentList({
   return (
     <div>
       {/* Header Row */}
-      <div className="section-header-box">
+      <div className="section-header-box" style={{ alignItems: 'center' }}>
         <div className="section-header-text">
-          <h2>Data Dokumen Permintaan Barang (PB)</h2>
-          <p>Daftar arsip dokumen pengadaan material & suku cadang warehouse PT Besmindo Materi Sewatama.</p>
+          <p style={{ margin: 0 }}>Daftar arsip dokumen pengadaan material & suku cadang warehouse PT Besmindo Materi Sewatama.</p>
         </div>
 
         <div className="section-actions">
@@ -126,7 +125,7 @@ export default function DocumentList({
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
-            <span>+ Upload Dokumen PB</span>
+            <span>Upload Dokumen PB</span>
           </button>
         </div>
       </div>

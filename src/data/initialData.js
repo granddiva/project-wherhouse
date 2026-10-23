@@ -6,19 +6,19 @@ export const DEFAULT_USERS = [
     id: "usr-1",
     username: "admin",
     password: "admin123",
-    name: "Budi Hendrawan",
+    name: "Admin Warehouse",
     role: "Admin Warehouse",
     nip: "BMS-WH-0012",
-    avatar: "BH"
+    avatar: "AW"
   },
   {
     id: "usr-2",
     username: "petugas",
     password: "petugas123",
-    name: "Siti Rahmawati",
-    role: "Petugas Pengarsipan",
+    name: "Staff Warehouse",
+    role: "Staff Warehouse",
     nip: "BMS-WH-0045",
-    avatar: "SR"
+    avatar: "SW"
   }
 ];
 

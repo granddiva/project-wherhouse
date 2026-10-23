@@ -10,6 +10,7 @@ import UploadModal from './components/UploadModal';
 import DetailModal from './components/DetailModal';
 import DownloadModal from './components/DownloadModal';
 import DeleteModal from './components/DeleteModal';
+import LogoutModal from './components/LogoutModal';
 
 const STORAGE_KEY_DOCS = 'BMS_PB_DOCUMENTS_V1';
 const STORAGE_KEY_USER = 'BMS_PB_AUTH_USER_V1';
@@ -51,6 +52,8 @@ export default function App() {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [deleteDoc, setDeleteDoc] = useState(null);
 
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+
   // Toast Notifications State
   const [toasts, setToasts] = useState([]);
 
@@ -81,13 +84,42 @@ export default function App() {
     } catch {}
   };
 
-  const handleLogout = () => {
+  const handlePromptLogout = () => {
+    setIsLogoutOpen(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setIsLogoutOpen(false);
     setCurrentUser(null);
     try {
       localStorage.removeItem(STORAGE_KEY_USER);
     } catch {}
     showToast('Anda telah keluar dari sistem warehouse', 'info');
   };
+
+  const handleUpdateUserName = (newName) => {
+    if (!newName || !newName.trim()) return;
+    const formattedName = newName.trim();
+    const initials = formattedName
+      .split(' ')
+      .filter(Boolean)
+      .map((w) => w.charAt(0).toUpperCase())
+      .join('')
+      .slice(0, 2) || 'US';
+
+    const updatedUser = {
+      ...(currentUser || {}),
+      name: formattedName,
+      avatar: initials
+    };
+    setCurrentUser(updatedUser);
+    try {
+      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(updatedUser));
+    } catch {}
+    showToast(`Nama profil berhasil diubah menjadi "${formattedName}"`, 'success');
+  };
+
+  const handleLogout = handlePromptLogout;
 
   // Document Handlers (Upload / Edit)
   const handleOpenUpload = () => {
@@ -161,8 +193,10 @@ export default function App() {
         currentView={currentView}
         setCurrentView={setCurrentView}
         currentUser={currentUser}
-        onLogout={handleLogout}
+        onPromptLogout={handlePromptLogout}
+        onLogout={handlePromptLogout}
         onOpenUpload={handleOpenUpload}
+        onUpdateUserName={handleUpdateUserName}
         docCount={documents.length}
       />
 
@@ -170,7 +204,10 @@ export default function App() {
       <div className="main-wrapper">
         <Navbar
           currentView={currentView}
+          currentUser={currentUser}
           onOpenUpload={handleOpenUpload}
+          onPromptLogout={handlePromptLogout}
+          onLogout={handlePromptLogout}
           onToggleMobileSidebar={() => {
             document.querySelector('.app-sidebar')?.classList.toggle('open');
           }}
@@ -242,6 +279,14 @@ export default function App() {
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
         onConfirmDelete={handleConfirmDelete}
+      />
+
+      {/* Modal Konfirmasi Logout */}
+      <LogoutModal
+        isOpen={isLogoutOpen}
+        onClose={() => setIsLogoutOpen(false)}
+        onConfirm={handleConfirmLogout}
+        currentUser={currentUser}
       />
 
       {/* Toast Notification Container */}
