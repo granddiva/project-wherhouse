@@ -134,24 +134,24 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .login-logo-img {
-  max-width: 220px;
-  height: auto;
+  width: 85px;
+  height: 85px;
   object-fit: contain;
   background: #ffffff;
-  padding: 8px 16px;
+  padding: 4px;
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
   border: 1px solid var(--border-subtle);
   transition: var(--transition);
 }
 
 .login-logo-img:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
 }
 
 .login-brand-badge {
